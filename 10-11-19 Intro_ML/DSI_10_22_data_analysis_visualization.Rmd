@@ -1,0 +1,72 @@
+---
+title: "DSI_slides"
+author: "Bowen Liu"
+date: "October 7, 2019"
+output: html_document
+---
+#Necessary packages to be installed. 
+If the packages have already been installed before, then don't run the following chunk 
+```{r}
+install.packages("faraway",dependencies = TRUE)
+install.packages("ggplot2",dependencies = TRUE) #This might take a while for the first-time R users.  
+```
+
+Introduction to data manipulation
+1: Read the data (From csv, txt or a specific packages)
+For the following example, we're gonna illustrate 3 ways of reading data into R
+```{r reading data}
+#1. Reading from an existing package (faraway)
+library(faraway)
+data(gavote)
+write.csv(gavote,"gavote.csv",row.names = FALSE)
+write.table(gavote,"gavote.txt",row.names = FALSE)
+gavote1<-read.csv("gavote.csv")
+gavote2<-read.table("gavote.txt")
+#Compare gavote1, gavote2 and gavote, they're the same. 
+```
+# Read the attributes of the data
+
+
+```{r obtain data info}
+gavote
+head(gavote)
+str(gavote)
+summary(gavote)
+help(gavote)
+#
+
+```
+
+## 
+
+#Plots
+
+```{r Create new variable based on existing variables; plot the histogram and density curves}
+gavote$undercount  = (gavote$ballots-gavote$votes)/(gavote$ballots) 
+summary(gavote$undercount)
+with(gavote,sum(ballots-votes)/sum(ballots))
+hist(gavote$undercount,main = "Undercount",xlab = "Percent Undercount")
+plot(density(gavote$undercount),main = "Undercount")
+rug(gavote$undercount)
+```
+
+Note that the `echo = FALSE` parameter was added to the code chunk to prevent printing of the R code that generated the plot.
+```{r Pie chart and bar plot; equipment of voting}
+pie(table(gavote$equip),col = c("pink","red","blue","gray","yellow"))
+barplot(sort(table(gavote$equip),decreasing = TRUE),las = 2) #las = 2 indicates the plot is vertical instead of horizontal.
+```
+
+#gg plot package and corresponding plots.
+
+```{r ggplot}
+gavote$pergore = gavote$gore/gavote$votes
+plot(pergore~perAA, gavote,xlab = "proportion of African American", ylab = "proportion for Gore")
+plot(undercount~equip,gavote,las = 3)
+###### Use ggplot to make the plot look better 
+library(ggplot2)
+ggplot(gavote) + aes(y = pergore, x = perAA) + geom_point(aes(colour = rural))+geom_smooth(method = lm, se = FALSE, fullrange = TRUE)
+ggplot(gavote) + aes(y = undercount, x = equip) +geom_boxplot(outlier.color = c("red"),outlier.shape = c("triangle"),coef = 1.5)
+ggplot(gavote) + aes(x = undercount)+geom_histogram(binwidth = 0.001)
+
+```
+
