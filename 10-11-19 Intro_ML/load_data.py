@@ -1,7 +1,7 @@
 #import packages
 import pandas as pd  # The as keyword lets you shorten the name of the import package
 
-original = pd.read_csv("Online_Retail.csv")             # Load the .csv file - It is important to note that you have to include the extension as well. 
+original = pd.read_csv("simple_retail.csv")             # Load the .csv file - It is important to note that you have to include the extension as well. 
                                                         # If you do not specify a path, Python will assume the file is in the same directory as the code file you a running.
                                                         # Documentation for pandas.readcsv() https://pandas.pydata.org/pandas-docs/stable/reference/api/pandas.read_csv.html
 
